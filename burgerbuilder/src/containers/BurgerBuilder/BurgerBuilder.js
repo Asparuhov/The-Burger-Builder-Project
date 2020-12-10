@@ -3,6 +3,8 @@ import Auxiliry from '../../HigherOrderComponents/Auxiliry';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UserInterface/Modal/Modal';
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
+
 const INGREDIENT_PRICES = {
     meat: 1.2,
     cheese: 0.8,
@@ -18,7 +20,12 @@ class BurgerBuilder extends Component {
             bacon: 0
         },
         Purchasable: false,
-        TotalPrice: 0.5
+        TotalPrice: 0.5,
+        choosingFinished: false
+    }
+    order = () => {
+        
+        this.setState({choosingFinished: true})
     }
     isPurchasable = (ingredients) => {
         let sum = Object.values(ingredients).reduce((a, b) => a + b, 0);
@@ -50,6 +57,9 @@ class BurgerBuilder extends Component {
         this.setState({ingredients: copy, TotalPrice: updatedPrice});
         this.isPurchasable(copy);
     }
+    cancelPurchase = () => {
+        this.setState({choosingFinished: false})
+    }
     render() {
         const disabledInfo = {
             ...this.state.ingredients
@@ -57,15 +67,22 @@ class BurgerBuilder extends Component {
         for (let key in disabledInfo) {
             disabledInfo[key] = disabledInfo[key] <= 0;
         }
+        
         return (
             <Auxiliry>
-                <Burger ingredients={this.state.ingredients}/>
+                <Modal show = {this.state.choosingFinished} modalClosed={this.cancelPurchase}>
+                    <OrderSummary ingredients={this.state.ingredients} finalPrice={this.state.TotalPrice} />
+                </Modal>
+                  
+                <Burger ingredients={this.state.ingredients} />
                 <BuildControls
                     ingredientAdded={this.addIngredient}
                     ingredientRemoved={this.removeIngredient}
                     disabled={disabledInfo}
                     price={this.state.TotalPrice}
-                    purchasable={this.state.Purchasable}/>
+                    purchasable={this.state.Purchasable}
+                    clicked={this.order}
+                />
             </Auxiliry>
         );
 

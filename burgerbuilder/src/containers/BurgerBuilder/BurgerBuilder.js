@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Auxiliry from '../../HigherOrderComponents/Auxiliry';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
-
+import Modal from '../../components/UserInterface/Modal/Modal';
 const INGREDIENT_PRICES = {
     meat: 1.2,
     cheese: 0.8,
@@ -17,7 +17,13 @@ class BurgerBuilder extends Component {
             salad: 0,
             bacon: 0
         },
+        Purchasable: false,
         TotalPrice: 0.5
+    }
+    isPurchasable = (ingredients) => {
+        let sum = Object.values(ingredients).reduce((a, b) => a + b, 0);
+        this.setState({Purchasable: sum > 0})
+        
     }
     addIngredient = (type) => {
         let updatedCount = this.state.ingredients[type] + 1;
@@ -27,7 +33,8 @@ class BurgerBuilder extends Component {
         let priceAddition = INGREDIENT_PRICES[type];
         let updatedPrice = this.state.TotalPrice + priceAddition;
 
-        this.setState({ingredients: copy, TotalPrice: updatedPrice})
+        this.setState({ingredients: copy, TotalPrice: updatedPrice});
+        this.isPurchasable(copy);
     }
     removeIngredient = (type) => {
         let updatedCount = this.state.ingredients[type] - 1;
@@ -40,7 +47,8 @@ class BurgerBuilder extends Component {
         let priceRemoval = INGREDIENT_PRICES[type];
         let updatedPrice = this.state.TotalPrice - priceRemoval;
 
-        this.setState({ingredients: copy, TotalPrice: updatedPrice})
+        this.setState({ingredients: copy, TotalPrice: updatedPrice});
+        this.isPurchasable(copy);
     }
     render() {
         const disabledInfo = {
@@ -57,7 +65,7 @@ class BurgerBuilder extends Component {
                     ingredientRemoved={this.removeIngredient}
                     disabled={disabledInfo}
                     price={this.state.TotalPrice}
-                />
+                    purchasable={this.state.Purchasable}/>
             </Auxiliry>
         );
 

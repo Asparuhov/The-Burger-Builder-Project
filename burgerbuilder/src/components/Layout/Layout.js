@@ -1,9 +1,10 @@
 import React from 'react';
 import Auxiliry from '../../HigherOrderComponents/Auxiliry'
-import classes from './Layout.module.css'
+import classes from './Layout.module.css';
+import Toolbar from '../Navigation/Toolbar/Toolbar';
 const Layout = props => (
     <Auxiliry>
-       <div>Toolbar, SideDrawer, Backdrop</div>
+       <Toolbar/>
        <main className={classes.Content}>
           {props.children}
        </main>

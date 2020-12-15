@@ -68,7 +68,7 @@ class BurgerBuilder extends Component {
             ingredients: this.state.ingredients,
             TotalPrice: this.state.TotalPrice
         }
-        axios.post('/orders.json', summary)
+        axios.post('/orders.json', summary) //fething data to FireBase database
             .then(response => {
                 console.log(response);
                 this.setState({loading: false, choosingFinished: false})

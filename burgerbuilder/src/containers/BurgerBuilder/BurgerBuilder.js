@@ -4,7 +4,8 @@ import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UserInterface/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
-
+import axios from '../../axiosOrders';
+import Spinner from '../../components/UserInterface/Spinner/Spinner';
 const INGREDIENT_PRICES = {
     meat: 1.2,
     cheese: 0.8,
@@ -21,7 +22,8 @@ class BurgerBuilder extends Component {
         },
         Purchasable: false,
         TotalPrice: 0.5,
-        choosingFinished: false
+        choosingFinished: false,
+        loading: false
     }
     order = () => {
         
@@ -61,7 +63,20 @@ class BurgerBuilder extends Component {
         this.setState({choosingFinished: false})
     }
     continuePurchase = () => {
-        alert('You continued!');
+        this.setState({loading: true})
+        const summary = {
+            ingredients: this.state.ingredients,
+            TotalPrice: this.state.TotalPrice
+        }
+        axios.post('/orders.json', summary)
+            .then(response => {
+                console.log(response);
+                this.setState({loading: false, choosingFinished: false})
+            })
+            .catch(error => {
+                console.log(error);
+                this.setState({loading: false, choosingFinished: false})
+            });
     }
     render() {
         const disabledInfo = {
@@ -70,15 +85,18 @@ class BurgerBuilder extends Component {
         for (let key in disabledInfo) {
             disabledInfo[key] = disabledInfo[key] <= 0;
         }
-        
+        let orderSummary = <OrderSummary ingredients={this.state.ingredients}
+        finalPrice={this.state.TotalPrice}
+        clickedContinue={this.continuePurchase}
+        clickedCancel={this.cancelPurchase}
+        />
+        if (this.state.loading) {
+            orderSummary = <Spinner />
+        }
         return (
             <Auxiliry>
                 <Modal show = {this.state.choosingFinished} modalClosed={this.cancelPurchase}>
-                    <OrderSummary ingredients={this.state.ingredients}
-                        finalPrice={this.state.TotalPrice}
-                        clickedContinue={this.continuePurchase}
-                        clickedCancel={this.cancelPurchase}
-                    />
+                    {orderSummary}
                 </Modal>
                   
                 <Burger ingredients={this.state.ingredients} />

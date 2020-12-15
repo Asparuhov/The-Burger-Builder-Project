@@ -91,6 +91,7 @@ class BurgerBuilder extends Component {
         clickedCancel={this.cancelPurchase}
         />
         if (this.state.loading) {
+            //toggle spinner if loading is true
             orderSummary = <Spinner />
         }
         return (

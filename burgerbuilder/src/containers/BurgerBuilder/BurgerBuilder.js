@@ -25,6 +25,12 @@ class BurgerBuilder extends Component {
         choosingFinished: false,
         loading: false
     }
+    componentDidMount() {
+        axios.get('https://burger-builder-project-b68f0-default-rtdb.europe-west1.firebasedatabase.app/ingredients')
+            .then(response => {
+                this.setState({ingredients: response.data})
+            });
+    }
     order = () => {
         
         this.setState({choosingFinished: true})
@@ -85,11 +91,28 @@ class BurgerBuilder extends Component {
         for (let key in disabledInfo) {
             disabledInfo[key] = disabledInfo[key] <= 0;
         }
-        let orderSummary = <OrderSummary ingredients={this.state.ingredients}
-        finalPrice={this.state.TotalPrice}
-        clickedContinue={this.continuePurchase}
-        clickedCancel={this.cancelPurchase}
-        />
+        let burger = <Spinner />
+        let orderSummary;
+        if (this.state.ingredients) {
+            burger = (
+                <Auxiliry>
+                    <Burger ingredients={this.state.ingredients} />
+                    <BuildControls
+                    ingredientAdded={this.addIngredient}
+                    ingredientRemoved={this.removeIngredient}
+                    disabled={disabledInfo}
+                    price={this.state.TotalPrice}
+                    purchasable={this.state.Purchasable}
+                    clicked={this.order}
+                    />
+                </Auxiliry>
+            )
+             orderSummary = <OrderSummary ingredients={this.state.ingredients}
+                finalPrice={this.state.TotalPrice}
+                clickedContinue={this.continuePurchase}
+                clickedCancel={this.cancelPurchase}
+                />
+        }
         if (this.state.loading) {
             //toggle spinner if loading is true
             orderSummary = <Spinner />
@@ -99,16 +122,7 @@ class BurgerBuilder extends Component {
                 <Modal show = {this.state.choosingFinished} modalClosed={this.cancelPurchase}>
                     {orderSummary}
                 </Modal>
-                  
-                <Burger ingredients={this.state.ingredients} />
-                <BuildControls
-                    ingredientAdded={this.addIngredient}
-                    ingredientRemoved={this.removeIngredient}
-                    disabled={disabledInfo}
-                    price={this.state.TotalPrice}
-                    purchasable={this.state.Purchasable}
-                    clicked={this.order}
-                />
+                  {burger}
             </Auxiliry>
         );
 

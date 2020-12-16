@@ -2,7 +2,7 @@ import React from 'react';
 import Auxiliry from '../../../HigherOrderComponents/Auxiliry';
 import Button from '../../UserInterface/Button/Button';
 const OrderSummary = props => {
-    const ingredientsSummary = Object.keys(props.ingredients).map(element => {
+    const ingredientsSummary = Object.keys(props.ingredients).map(element => { //dynamicly render a list of the orderSummary
         return (<li key={element}><strong><span style={{textTransform: 'capitilize'}}>{element}</span>: {props.ingredients[element]}</strong></li>)
 
     });

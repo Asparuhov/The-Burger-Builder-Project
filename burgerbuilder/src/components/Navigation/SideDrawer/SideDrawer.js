@@ -1,29 +1,29 @@
 import React from 'react';
-import Logo from '../../Navigation/Logo/Logo';
-import NavigationItems from '../../Navigation/NavigationItems/NavigationItems';
-import NavigationItem from '../NavigationItems/NavigationItem/NavigationItem';
-import classes from './SideDrawer.module.css';
-import BackDrop from '../../UserInterface/Backdrop/BackDrop';
-import Auxiliry from '../../../HigherOrderComponents/Auxiliry';
-const SideDrawer = props => {
+
+import Logo from '../../Logo/Logo';
+import NavigationItems from '../NavigationItems/NavigationItems';
+import classes from './SideDrawer.css';
+import Backdrop from '../../UI/Backdrop/Backdrop';
+import Auxility from '../../../hoc/Auxility/Auxility';
+
+const sideDrawer = ( props ) => {
     let attachedClasses = [classes.SideDrawer, classes.Close];
     if (props.open) {
         attachedClasses = [classes.SideDrawer, classes.Open];
     }
     return (
-        <Auxiliry>
-            <BackDrop show={props.open} clicked={props.closed}/>
+        <Auxility>
+            <Backdrop show={props.open} clicked={props.closed}/>
             <div className={attachedClasses.join(' ')}>
-            <div className={classes.Logo}>
-               <Logo />
-             </div>
-            <nav>
-                <NavigationItems/>
-            </nav>
-          
+                <div className={classes.Logo}>
+                    <Logo />
+                </div>
+                <nav>
+                    <NavigationItems />
+                </nav>
             </div>
-        </Auxiliry>
-    )
+        </Auxility>
+    );
 };
 
-export default SideDrawer;
+export default sideDrawer;

@@ -1,7 +1,7 @@
-.BuildControls{
-    width:100%;
-    background-color: #CF9F2E;
-    display:flex;
+.BuildControls {
+    width: 100%;
+    background-color: #CF8F2E;
+    display: flex;
     flex-flow: column;
     align-items: center;
     box-shadow: 0 2px 1px #ccc;

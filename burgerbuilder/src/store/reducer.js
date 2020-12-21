@@ -23,7 +23,8 @@ const reducer = (state = initialState, action) => {
                 ingredients: {
                     ...state.ingredients,
                     [action.ingredient]: state.ingredients[action.ingredient] + 1
-                }
+                },
+                totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredient]
             }
             case actionTypes.REM_INGREDIENTS:
                 return {
@@ -31,7 +32,8 @@ const reducer = (state = initialState, action) => {
                     ingredients: {
                         ...state.ingredients,
                         [action.ingredient]: state.ingredients[action.ingredient] - 1
-                    }
+                    },
+                    totalPrice: state.totalPrice - INGREDIENT_PRICES[action.ingredient]
                 }
         default:
             return state;
